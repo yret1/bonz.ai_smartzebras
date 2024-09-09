@@ -1,0 +1,15 @@
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: bonzaiapi
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: eu-north-1
+
+functions:
+  hello:
+    handler: /functions/hello/handler.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
