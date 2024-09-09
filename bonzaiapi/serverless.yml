@@ -7,9 +7,30 @@ provider:
   region: eu-north-1
 
 functions:
-  hello:
-    handler: /functions/hello/handler.hello
+  Admin:
+    handler: Admin/getAllBoking.handler
     events:
       - httpApi:
-          path: /
+          path: /getBookingsAdmin
           method: get
+
+ createBooking:
+    handler: Guest/getAllBoking.handler
+    events:
+      - httpApi:
+          path: /createBooking
+          method: post
+
+  changeBooking:
+    handler: Guest/changeBooking.handler
+    events:
+      - httpApi:
+          path: /changeBooking/{id}
+          method: put
+
+  deleteBooking:
+    handler: Guest/deleteBooking.handler
+    events:
+      - httpApi:
+          path: /deleteBooking/{id}
+          method: delete          
