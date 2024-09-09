@@ -16,8 +16,8 @@ package:
   individually: true
 
 functions:
-  Admin:
-    handler: Admin/getAllBoking.handler
+  getAllBookings:
+    handler: Receptionist/getAllBooking.handler
     events:
       - httpApi:
           path: /getBookingsAdmin
