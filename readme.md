@@ -15,6 +15,16 @@ roomsReq: en array med alla rum som hotellet erbjuder. ändra count på varje ru
 from: Datum för bokningens start i formatet YYYY-MM-DD
 to: Datum för bokningens slut i formatet YYYY-MM-DD
 
+
+
+***OBSERVERA***
+Det går inte att boka fler rum än antalet gäster. Minst en gäst per rum.
+Det går inte heller att boka färre rum än antalet sängar
+
+Svit: 3 sängar
+Dubbel: 2 sängar
+Single: 1 säng
+
 ```
 {
 	"bookingName" : "Simon",
