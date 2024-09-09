@@ -35,16 +35,19 @@ exports.handler = async (event) => {
   const guests = body.guests;
 
   const BookingItem = {
-    bookingName: bookingName,
-    guests: guests,
+    bookingName: bookingName, // string
+    guests: guests, // number
   };
 
-  if (totalBeds >= guests && guests !== 0 && requestedRooms.length !== 0) {
+  if (totalBeds >= guests && guests !== 0) {
     try {
       await docClient
         .put({
           TableName: tableName,
-          Item: BookingItem,
+          Item: {
+            bookingName: bookingName,
+            guests: guests,
+          },
         })
         .promise();
 

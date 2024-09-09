@@ -36,11 +36,15 @@ resources:
     Bookings:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: "Bookings"
+        TableName: "BookingDB"
         AttributeDefinitions:
-          - AttributeName: "Booking"
-            AttributeType: "S"
+          - AttributeName: bookingName
+            AttributeType: S
+          - AttributeName: guests
+            AttributeType: N
         KeySchema:
-          - AttributeName: "Booking"
-            KeyType: "HASH"
+          - AttributeName: bookingName
+            KeyType: HASH
+          - AttributeName: guests
+            KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
