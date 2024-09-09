@@ -1,67 +1,62 @@
 const AWS = require("aws-sdk");
-const { uuid } = require("uuidv4");
+const { v4: uuidv4 } = require("uuid");
 const docClient = new AWS.DynamoDB.DocumentClient({
   region: "eu-north-1",
 });
 
 exports.handler = async (event) => {
-  const rooms = [
-    {
-      roomType: "Svit",
-      cost: 1500,
-      space: 3,
-    },
-    { roomType: "Dubbel", cost: 1000, space: 2 },
-    { roomType: "Single", cost: 500, space: 1 },
-  ];
+  const tableName = "allBookings";
 
-  const tableName = "BookingsDatabase";
+  // Parsing event body
+  const body = JSON.parse(event.body); // No need for await here
 
-  const body = JSON.parse(event.body);
+  console.log("Body: ", body);
 
   const { bookingName, guests, roomsReq } = body;
 
-  //const bookingRequset = body.bookingRequset;
-
-  const id = uuid();
+  console.log("Booking name: ", bookingName);
+  console.log("Guests: ", guests);
+  console.log("Rooms requested: ", roomsReq);
+  const id = uuidv4();
 
   let svit = 0;
   let dubbel = 0;
   let single = 0;
 
+  // Process room types and counts
   roomsReq.forEach((room) => {
     switch (room.name) {
       case "Svit":
-        svit++;
+        svit = room.count;
         break;
       case "Dubbel":
-        dubbel++;
+        dubbel = room.count;
         break;
       case "Single":
-        single++;
+        single = room.count;
         break;
     }
   });
 
+  // Calculate cost and room details
   const cost = svit * 1500 + dubbel * 1000 + single * 500;
+  const totalBeds = svit * 3 + dubbel * 2 + single * 1;
+  const totalRooms = svit + dubbel + single;
 
-  const totalBeds = 4;
-
+  // Validate booking
   if (totalBeds >= guests && guests !== 0) {
     try {
+      // Save booking to DynamoDB
       await docClient
         .put({
           TableName: tableName,
           Item: {
-            id: id, //string
-            bookingName: bookingName, //string
-            guests: guests, // number
-            bookedRooms: {
-              Svit: svit, // number
-              Dubbel: dubbel, // number
-              Single: single, // number
-            },
-            cost: cost, //string
+            id: id,
+            bookingName: bookingName,
+            guests: guests,
+            totalRooms: totalRooms,
+            totalBeds: totalBeds,
+            cost: cost, // This is a number, not a string
           },
         })
         .promise();
@@ -75,17 +70,20 @@ exports.handler = async (event) => {
         }),
       };
     } catch (error) {
+      // Log and return 500 in case of error
+      console.error("DynamoDB Error: ", error);
       return {
         statusCode: 500,
         body: JSON.stringify({
           message: "Could not create booking",
-          error: error,
+          error: error.message,
         }),
       };
     }
   } else {
+    // Validation failure response
     return {
-      statusCode: 500,
+      statusCode: 400,
       body: JSON.stringify({
         message:
           "Ojsan. Det verkar som att du har bokat för många gäster. Försök igen.",

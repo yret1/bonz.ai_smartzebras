@@ -11,6 +11,10 @@ provider:
   iam:
     role: arn:aws:iam::767397735922:role/Codedeployer
 
+
+package:
+  individually: true
+
 functions:
   Admin:
     handler: Admin/getAllBoking.handler
@@ -42,48 +46,15 @@ resources:
     Bookings:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: "BookingsDatabase"
+        TableName: allBookings
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
           - AttributeName: bookingName
             AttributeType: S
-          - AttributeName: guests
-            AttributeType: N
-          - AttributeName: Svit
-            AttributeType: N
-          - AttributeName: Dubbel
-            AttributeType: N
-          - AttributeName: Single
-            AttributeType: N
         KeySchema:
           - AttributeName: id
             KeyType: HASH
           - AttributeName: bookingName
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
-        GlobalSecondaryIndexes:
-          - IndexName: GuestsIndex
-            KeySchema:
-              - AttributeName: guests
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-          - IndexName: SvitIndex
-            KeySchema:
-              - AttributeName: Svit
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-          - IndexName: DubbelIndex
-            KeySchema:
-              - AttributeName: Dubbel
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
-          - IndexName: SingleIndex
-            KeySchema:
-              - AttributeName: Single
-                KeyType: HASH
-            Projection:
-              ProjectionType: ALL
