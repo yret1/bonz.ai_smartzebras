@@ -1,4 +1,3 @@
-# "service" is the name of this project. This will also be added to your AWS resource names.
 service: bonzaiapi
 
 provider:
@@ -13,24 +12,35 @@ functions:
       - httpApi:
           path: /getBookingsAdmin
           method: get
-
- createBooking:
-    handler: Guest/getAllBoking.handler
+  createBooking:
+    handler: Guest/createBooking.handler
     events:
       - httpApi:
           path: /createBooking
           method: post
-
   changeBooking:
     handler: Guest/changeBooking.handler
     events:
       - httpApi:
           path: /changeBooking/{id}
           method: put
-
   deleteBooking:
     handler: Guest/deleteBooking.handler
     events:
       - httpApi:
           path: /deleteBooking/{id}
-          method: delete          
+          method: delete
+
+resources:
+  Resources:
+    Bookings:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: "Bookings"
+        AttributeDefinitions:
+          - AttributeName: "Booking"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "Booking"
+            KeyType: "HASH"
+        BillingMode: PAY_PER_REQUEST
