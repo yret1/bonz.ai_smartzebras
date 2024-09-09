@@ -1,3 +1,3 @@
-## Gruppprojekt Smart Zebras
+# Gruppprojekt Smart Zebras
 
-# Jonathan Tirapegui, Simon Gustavsson, Jens Alm
+## Jonathan Tirapegui, Simon Gustavsson, Jens Alm
