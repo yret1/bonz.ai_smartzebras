@@ -1,5 +1,5 @@
 const AWS = require("aws-sdk");
-
+const { uuid } = require("uuidv4");
 const docClient = new AWS.DynamoDB.DocumentClient({
   region: "eu-north-1",
 });
@@ -15,29 +15,37 @@ exports.handler = async (event) => {
     { roomType: "Single", cost: 500, space: 1 },
   ];
 
-  const tableName = "Bookings";
+  const tableName = "BookingsDatabase";
 
   const body = JSON.parse(event.body);
-  console.log("Body", body);
+
+  const { bookingName, guests, roomsReq } = body;
 
   //const bookingRequset = body.bookingRequset;
-  const bookingName = body.bookingName;
-  // const requestedRooms = body.rooms;
 
-  // Antal lediga sängar
-  /**const totalBeds = requestedRooms.reduce((acc, room) => {
-    const sleeps = rooms.find((r) => r.space === room.space);
-    return acc + sleeps.space;
-  });*/
+  const id = uuid();
+
+  let svit = 0;
+  let dubbel = 0;
+  let single = 0;
+
+  roomsReq.forEach((room) => {
+    switch (room.name) {
+      case "Svit":
+        svit++;
+        break;
+      case "Dubbel":
+        dubbel++;
+        break;
+      case "Single":
+        single++;
+        break;
+    }
+  });
+
+  const cost = svit * 1500 + dubbel * 1000 + single * 500;
 
   const totalBeds = 4;
-  // Antal gäster
-  const guests = body.guests;
-
-  const BookingItem = {
-    bookingName: bookingName, // string
-    guests: guests, // number
-  };
 
   if (totalBeds >= guests && guests !== 0) {
     try {
@@ -45,19 +53,42 @@ exports.handler = async (event) => {
         .put({
           TableName: tableName,
           Item: {
-            bookingName: bookingName,
-            guests: guests,
+            id: id, //string
+            bookingName: bookingName, //string
+            guests: guests, // number
+            bookedRooms: {
+              Svit: svit, // number
+              Dubbel: dubbel, // number
+              Single: single, // number
+            },
+            cost: cost, //string
           },
         })
         .promise();
 
-      return sendResponse(200, { success: true });
-    } catch (error) {}
+      return {
+        statusCode: 200,
+        body: JSON.stringify({
+          message: `Bokning skapad med id: ${id}. Du har bokat ${svit} sviter, ${dubbel} dubbelrum och ${single} enkelrum. Totalt antal gäster: ${guests}. Kostnad: ${cost} kr`,
+          bookingName: bookingName,
+          guests: guests,
+        }),
+      };
+    } catch (error) {
+      return {
+        statusCode: 500,
+        body: JSON.stringify({
+          message: "Could not create booking",
+          error: error,
+        }),
+      };
+    }
   } else {
     return {
       statusCode: 500,
       body: JSON.stringify({
-        message: "Not enough beds or guests",
+        message:
+          "Ojsan. Det verkar som att du har bokat för många gäster. Försök igen.",
       }),
     };
   }

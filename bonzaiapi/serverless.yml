@@ -1,9 +1,15 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: gustavssondev
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: serverlessapp
 service: bonzaiapi
 
 provider:
   name: aws
   runtime: nodejs20.x
   region: eu-north-1
+  iam:
+    role: arn:aws:iam::767397735922:role/Codedeployer
 
 functions:
   Admin:
@@ -36,15 +42,48 @@ resources:
     Bookings:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: "BookingDB"
+        TableName: "BookingsDatabase"
         AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
           - AttributeName: bookingName
             AttributeType: S
           - AttributeName: guests
             AttributeType: N
+          - AttributeName: Svit
+            AttributeType: N
+          - AttributeName: Dubbel
+            AttributeType: N
+          - AttributeName: Single
+            AttributeType: N
         KeySchema:
-          - AttributeName: bookingName
+          - AttributeName: id
             KeyType: HASH
-          - AttributeName: guests
+          - AttributeName: bookingName
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
+        GlobalSecondaryIndexes:
+          - IndexName: GuestsIndex
+            KeySchema:
+              - AttributeName: guests
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: SvitIndex
+            KeySchema:
+              - AttributeName: Svit
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: DubbelIndex
+            KeySchema:
+              - AttributeName: Dubbel
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+          - IndexName: SingleIndex
+            KeySchema:
+              - AttributeName: Single
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
