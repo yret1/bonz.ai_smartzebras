@@ -35,7 +35,7 @@ Single: 1 säng
 			"count" : 3
 		},
 		{
-			"name" : "Dubble",
+			"name" : "Dubbel",
 			"count" : 0
 		},
 		{
