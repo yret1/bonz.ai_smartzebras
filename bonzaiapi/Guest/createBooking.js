@@ -127,6 +127,7 @@ exports.handler = async (event) => {
           message: `Tack för din bokning, ${bookingName}! Vi ser fram emot att välkomna dig till Bonzai Hotel mellan ${from} och ${to}. Ditt bokningsnummer är ${id}. Använd detta nummer vid avbokning eller kontakt med support.  Total kostnad för din bokning är ${cost} kr. Vid eventuella frågor, vänligen kontakta oss på Bonzai Hotels!.`,
           bookingName: bookingName,
           id: id,
+          result: "success",
         }),
       };
     } catch (error) {
@@ -136,6 +137,7 @@ exports.handler = async (event) => {
         body: JSON.stringify({
           message: "Bokningen misslyckades. Försök igen!",
           error: error.message,
+          result: "error",
         }),
       };
     }
@@ -145,6 +147,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         message:
           "Oj då, antalet gäster är färre än antalet rum. Var vänlig och kontrollera dina val.",
+        result: "roomsOverGuests",
       }),
     };
   } else {
@@ -152,6 +155,7 @@ exports.handler = async (event) => {
       statusCode: 400,
       body: JSON.stringify({
         message: "Oj då, något gick fel. Var vänlig och kontrollera dina val.",
+        result: "error",
       }),
     };
   }
