@@ -16,12 +16,61 @@ exports.handler = async (event) => {
     },
   };
 
+  const existingBooking = await dynamoDB
+    .get({
+      TableName: tableName,
+      Key: { id: bookingNumber, bookingName: bookingName },
+    })
+    .promise();
+
+  if (!existingBooking.Item) {
+    return {
+      statusCode: 404,
+      body: JSON.stringify({ message: "Bokningen hittades inte." }),
+    };
+  }
+
+  const calculateRemovable = (startDate) => {
+    const start = new Date(startDate);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const differenceInMillis = start.getTime() - today.getTime();
+    const millisecondsInDay = 24 * 60 * 60 * 1000;
+    const differenceInDays = Math.floor(differenceInMillis / millisecondsInDay);
+
+    if (differenceInDays < 2) {
+      return {
+        removable: false,
+        message:
+          "Din bokning är mindre än 2 dagar bort eller redan aktiv. Det går inte längre att ändra eller avboka.",
+      };
+    }
+
+    return {
+      removable: true,
+    };
+  };
+
+  // Usage in your API logic
+  const bookingCheck = calculateRemovable(existingBooking.Item.from);
+
+  if (!bookingCheck.removable) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        message: bookingCheck.message,
+      }),
+    };
+  }
+
   try {
     const response = await dynamoDB.delete(params).promise();
     if (!response) {
       return {
         statusCode: 404,
-        body: JSON.stringify({ ERROR: "Booking number not found" }),
+        body: JSON.stringify({ ERROR: "Booking hittades inte" }),
       };
     }
     return {

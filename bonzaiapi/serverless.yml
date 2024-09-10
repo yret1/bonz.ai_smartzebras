@@ -39,6 +39,12 @@ functions:
       - httpApi:
           path: /deleteBooking/{id}/{bookingName}
           method: delete
+  getBooking:
+    handler: Guest/getBooking.handler
+    events:
+      - httpApi:
+          path: /getBookingsToEdit/{id}/{bookingName}
+          method: get
 
 resources:
   Resources:

@@ -49,6 +49,8 @@ exports.handler = async (event) => {
 
   const { guests, roomsReq, from, to } = body; // Hämta bokningsinformation från kroppen
 
+  const today = new Date().toISOString.split("T")[0];
+
   try {
     // Kontrollera att bokningen existerar
     const existingBooking = await docClient
@@ -62,6 +64,41 @@ exports.handler = async (event) => {
       return {
         statusCode: 404,
         body: JSON.stringify({ message: "Bokningen hittades inte." }),
+      };
+    }
+    const calculateRemovable = (startDate) => {
+      const start = new Date(startDate);
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const differenceInMillis = start.getTime() - today.getTime();
+      const millisecondsInDay = 24 * 60 * 60 * 1000;
+      const differenceInDays = Math.floor(
+        differenceInMillis / millisecondsInDay
+      );
+
+      if (differenceInDays < 2) {
+        return {
+          removable: false,
+          message:
+            "Din bokning är mindre än 2 dagar bort eller redan aktiv. Det går inte längre att ändra eller avboka.",
+        };
+      }
+
+      return {
+        removable: true,
+      };
+    };
+
+    const bookingCheck = calculateRemovable(existingBooking.Item.from);
+
+    if (!bookingCheck.removable) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: bookingCheck.message,
+        }),
       };
     }
 
