@@ -126,7 +126,7 @@ exports.handler = async (event) => {
         body: JSON.stringify({
           message: `Tack för din bokning, ${bookingName}! Vi ser fram emot att välkomna dig till Bonzai Hotel mellan ${from} och ${to}. Ditt bokningsnummer är ${id}. Använd detta nummer vid avbokning eller kontakt med support.  Total kostnad för din bokning är ${cost} kr. Vid eventuella frågor, vänligen kontakta oss på Bonzai Hotels!.`,
           bookingName: bookingName,
-          guests: guests,
+          id: id,
         }),
       };
     } catch (error) {
