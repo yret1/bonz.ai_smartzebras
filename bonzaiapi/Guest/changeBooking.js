@@ -44,6 +44,7 @@ const calculateNights = (startDate, endDate) => {
 exports.handler = async (event) => {
   const tableName = "allBookings";
   const bookingId = event.pathParameters.id; // Hämta boknings-ID från URL-parametrar
+  const bookingName = event.pathParameters.bookingName;
   const body = JSON.parse(event.body); // Parsar JSON-kroppen i förfrågan
 
   const { guests, roomsReq, from, to } = body; // Hämta bokningsinformation från kroppen
@@ -53,7 +54,7 @@ exports.handler = async (event) => {
     const existingBooking = await docClient
       .get({
         TableName: tableName,
-        Key: { id: bookingId },
+        Key: { id: bookingId, bookingName: bookingName },
       })
       .promise();
 
@@ -112,9 +113,9 @@ exports.handler = async (event) => {
       await docClient
         .update({
           TableName: tableName,
-          Key: { id: bookingId },
+          Key: { id: bookingId, bookingName: bookingName },
           UpdateExpression:
-            "set guests = :guests, totalRooms = :totalRooms, totalBeds = :totalBeds, cost = :cost, #from = :from, #to = :to",
+            "set guests = :guests, totalRooms = :totalRooms, totalBeds = :totalBeds, cost = :cost, #from = :from, #to = :to ",
           ExpressionAttributeValues: {
             ":guests": guests,
             ":totalRooms": totalRooms,
@@ -149,7 +150,7 @@ exports.handler = async (event) => {
     return {
       statusCode: 500,
       body: JSON.stringify({
-        message: "Bokningen kunde inte uppdateras. Försök igen senare.",
+        message: "Bokningen kunde inte uppdateras. Försök igen senare...",
         error: error.message,
       }),
     };
