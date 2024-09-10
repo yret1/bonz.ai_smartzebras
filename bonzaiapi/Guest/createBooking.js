@@ -5,6 +5,7 @@ const docClient = new AWS.DynamoDB.DocumentClient({
 });
 
 const checkOccupiedRooms = async () => {
+  console.log("Hello world från Jonathan");
   const tableName = "allBookings";
   try {
     const data = await docClient.scan({ TableName: tableName }).promise();

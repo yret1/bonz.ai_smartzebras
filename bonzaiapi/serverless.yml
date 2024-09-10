@@ -11,7 +11,6 @@ provider:
   iam:
     role: arn:aws:iam::767397735922:role/Codedeployer
 
-
 package:
   individually: true
 
@@ -38,7 +37,7 @@ functions:
     handler: Guest/deleteBooking.handler
     events:
       - httpApi:
-          path: /deleteBooking/{id}
+          path: /deleteBooking/{id}/{bookingName}
           method: delete
 
 resources:
