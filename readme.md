@@ -70,6 +70,7 @@ Method: PUT
 Body:
 ```
 
+```
 {
 "bookingName" : "Simon",  
  "guests" : 8, // Testa att ändra antalet gäster
