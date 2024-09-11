@@ -55,6 +55,7 @@ Body:
 
 ```
 
+### Ändra Bokning
 Nu har du skapat en boking.
 Nästa steg är att prova göra en ändring i bokningen. Observera att du inte kan ändra namnet på den bokade gästen utan enbart hur många gäster ni är och antalet gäster samt datum.
 
@@ -94,6 +95,7 @@ Body:
 
 ```
 
+### Kontrollera Bokning
 Hämta bokningen och se ifall den har uppdaterats med id och namn som endpoint i URL:en
 
 URL - https://yd63of64si.execute-api.eu-north-1.amazonaws.com/getBookingsToEdit/8821b343-203f-4a6c-a3b6-ed67d2534652/Simon
@@ -106,13 +108,18 @@ Sätt ID och Namn i url:en
 
 OBS! Bokningen får inte ändrar om det är mindre än två dagar till startdatum.
 
+
+### Avboka
+
 URL - https://yd63of64si.execute-api.eu-north-1.amazonaws.com/deleteBooking/8821b343-203f-4a6c-a3b6-ed67d2534652/Simon
 
 Method - DELETE
+OBS! Bokningen får inte ändrar om det är mindre än två dagar till startdatum.
 
+
+### Receptionist Översikt
 Om du som receptionist vill se över alla bokningar kan du göra det via.
 
 URL - https://yd63of64si.execute-api.eu-north-1.amazonaws.com/getBookingAdmin
 Method: GET
-
-Som admin kan du se över alla ledigarum samt alla inlagda bokningar.
+Detta returnerar samtliga bokningar samt antalet lediga rum
