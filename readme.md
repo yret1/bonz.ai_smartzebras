@@ -72,7 +72,7 @@ Body:
 
 ```
 {
-"bookingName" : "Simon",  
+"bookingName" : "Simon",
  "guests" : 8, // Testa att ändra antalet gäster
 "roomsReq" : [
 {
@@ -100,7 +100,6 @@ URL - https://yd63of64si.execute-api.eu-north-1.amazonaws.com/getBookingsToEdit/
 
 Method: GET
 
-
 Om du som gäst skulle få förhinder och vill avboka din bokning så finns den möjligheten.
 
 Sätt ID och Namn i url:en
@@ -117,4 +116,3 @@ URL - https://yd63of64si.execute-api.eu-north-1.amazonaws.com/getBookingAdmin
 Method: GET
 
 Som admin kan du se över alla ledigarum samt alla inlagda bokningar.
-```
