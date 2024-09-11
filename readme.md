@@ -7,13 +7,14 @@
 ### Skapa bokning
 
 *method* **POST**
+*URL* https://yd63of64si.execute-api.eu-north-1.amazonaws.com/createBooking
 
-krav:
-bookingName: namnet på den som står för bokningen
-guests: antalet gäster (oavsett ålder)
-roomsReq: en array med alla rum som hotellet erbjuder. ändra count på varje rum för det som kunden önskar. 0 = inget rum av denna typ behövs.
-from: Datum för bokningens start i formatet YYYY-MM-DD
-to: Datum för bokningens slut i formatet YYYY-MM-DD
+***krav***:
+bookingName: namnet på den som står för bokningen <br/>
+guests: antalet gäster (oavsett ålder)<br/>
+roomsReq: en array med alla rum som hotellet erbjuder. ändra count på varje rum för det som kunden önskar. 0 = inget rum av denna typ behövs.<br/>
+from: Datum för bokningens start i formatet YYYY-MM-DD<br/>
+to: Datum för bokningens slut i formatet YYYY-MM-DD<br/>
 
 
 
