@@ -28,7 +28,11 @@ exports.handler = async (event) => {
     const data = await docClient.scan({ TableName: tableName }).promise();
     return {
       statusCode: 200,
-      body: JSON.stringify({ bookings: data.Items, freeRooms: availableRooms }),
+      body: JSON.stringify(
+        { bookings: data.Items, freeRooms: availableRooms },
+        null,
+        2
+      ),
     };
   } catch (err) {
     return {
