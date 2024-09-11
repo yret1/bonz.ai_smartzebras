@@ -67,6 +67,7 @@ Method: PUT
 
 Body:
 
+```
 {
 "bookingName" : "Simon",  
  "guests" : 8, // Testa att ändra antalet gäster
@@ -95,7 +96,7 @@ Hämta bokningen och se ifall den har uppdaterats med id och namn som endpoint i
 URL - https://yd63of64si.execute-api.eu-north-1.amazonaws.com/getBookingsToEdit/8821b343-203f-4a6c-a3b6-ed67d2534652/Simon
 
 Method: GET
-```
+
 
 Om du som gäst skulle få förhinder och vill avboka din bokning så finns den möjligheten.
 
