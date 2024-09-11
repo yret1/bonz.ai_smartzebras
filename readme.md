@@ -21,7 +21,7 @@ Svit: 3 sängar
 Dubbel: 2 sängar
 Single: 1 säng
 
-```
+
 
 *****INSTRUKTIONER*****
 
@@ -68,7 +68,7 @@ URL - https://yd63of64si.execute-api.eu-north-1.amazonaws.com/changeBooking/8821
 Method: PUT
 
 Body:
-```
+
 
 ```
 {
