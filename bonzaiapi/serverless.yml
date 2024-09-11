@@ -1,15 +1,65 @@
-# "service" is the name of this project. This will also be added to your AWS resource names.
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: gustavssondev
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: serverlessapp
 service: bonzaiapi
 
 provider:
   name: aws
   runtime: nodejs20.x
   region: eu-north-1
+  iam:
+    role: arn:aws:iam::767397735922:role/Codedeployer
+
+package:
+  individually: true
 
 functions:
-  hello:
-    handler: /functions/hello/handler.hello
+  getAllBookings:
+    handler: Receptionist/getAllBooking.handler
     events:
       - httpApi:
-          path: /
+          path: /getBookingsAdmin
           method: get
+  createBooking:
+    handler: Guest/createBooking.handler
+    events:
+      - httpApi:
+          path: /createBooking
+          method: post
+  changeBooking:
+    handler: Guest/changeBooking.handler
+    events:
+      - httpApi:
+          path: /changeBooking/{id}/{bookingName}
+          method: put
+  deleteBooking:
+    handler: Guest/deleteBooking.handler
+    events:
+      - httpApi:
+          path: /deleteBooking/{id}/{bookingName}
+          method: delete
+  getBooking:
+    handler: Guest/getBooking.handler
+    events:
+      - httpApi:
+          path: /getBookingsToEdit/{id}/{bookingName}
+          method: get
+
+resources:
+  Resources:
+    Bookings:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: allBookings
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+          - AttributeName: bookingName
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: bookingName
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
